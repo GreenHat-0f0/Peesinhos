@@ -1,0 +1,21 @@
+
+-error messages for typing wrong
+
+-showing list of options before input
+
+-PICKLE AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARHJdklfbgjksefn
+
+-save with pickle function
+
+-better organized gerando documento inputs
+
+-cant register already existing email
+
+-senha oculta
+
+
+PICKLE
+    -usuarios
+    -documentos de cada usuarios
+salvar option 
+apagar save option with "are you suuure???"
