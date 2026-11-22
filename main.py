@@ -3,7 +3,6 @@
 import pickle
 import math
 import os
-from pathlib import Path
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -105,7 +104,6 @@ def cadastro():
     novo_senha = input("Senha: ")
     usuarios.append(Usuario(novo_email, novo_senha))
 
-# curr_user = None
 def login():
     global curr_user
     sup_email = input("Email: ")
@@ -130,19 +128,27 @@ def criar_doc():
                     documento.layout = modelo.layout(documento)
             break
 
-firstdocs = usuarios
-
-if os.path.exists('Docs.pkl'):
-    with open('Docs.pkl', 'rb') as f:
-        usuarios = pickle.load(f)
-
 def aaa():
-    global usuarios
-    print("""
+    global usuarios, documentos
+    
+    if os.path.exists('Dados.pkl'):
+        with open('Dados.pkl', 'rb') as f:
+            usuarios = pickle.load(f)
+        
+    
+    while True:
+        try:
+            print("""
 1 - Login de usuário
 2 - Cadastro de usuário
-          """)
-    opcao = int(input("Opção: "))
+0 - Sair
+            """)
+            opcao = int(input("Opção: "))
+            break
+        except ValueError:
+            clear()
+            print("Opção inválida, tente novamente.")
+    
     clear()
     if opcao == 1:
         print("Login de usuário\n")
@@ -151,17 +157,26 @@ def aaa():
             print("Login efetuado com sucesso. ")
             
             def bbb():
-                global curr_user, usuarios
-                print("""
+                global curr_user, usuarios, documentos
+                
+                
+                
+                while True:
+                    try:
+                        print("""
 1 - Gerar documento
 2 - Editar documento
 3 - Apagar documento
 4 - Listar documentos
 5 - Salvar Dados
 6 - Apagar Dados
-7 - Logout
-                    """)
-                y = int(input("Opção: "))
+0 - Logout
+                        """)
+                        y = int(input("Opção: "))
+                        break
+                    except ValueError:
+                        clear()
+                        print("Opção inválida, tente novamente.")
                 clear()
                 
                 if y == 1:
@@ -209,20 +224,25 @@ def aaa():
                     bbb()
                         
                 elif y == 5:
-                    with open('Docs.pkl', 'wb') as f:
-                        pickle.dump(curr_user.documentos, f)
+                    with open('Dados.pkl', 'wb') as f:
+                        pickle.dump(usuarios, f)
                         clear()
                         print("Dados salvos.")
-                        bbb()
+                    bbb()
                 
                 elif y == 6:
-                    Path("Docs.pkl").unlink(missing_ok=True)
-                    curr_user.documentos = firstdocs
+                    curr_user.documentos = []
+                    with open('Dados.pkl', 'wb') as f:
+                        pickle.dump(usuarios, f)
                     clear()
                     print("Dados apagados.")
                     bbb()
                         
-                elif y == 7:
+                elif y == 0:
+                    if os.path.exists('Dados.pkl'):
+                        with open('Dados.pkl', 'rb') as f:
+                            usuarios = pickle.load(f)
+                    
                     curr_user = None
                     clear()
                     print("Logout efetuado.")
@@ -242,9 +262,18 @@ def aaa():
     elif opcao == 2:
         print("Cadastro de usuário\n")
         cadastro()
+        
+        with open('Dados.pkl', 'wb') as f:
+            pickle.dump(usuarios, f)
+            
         clear()
         print("Novo usuário cadastrado.")
         aaa()
+        
+    elif opcao == 0:
+        clear()
+        pass
+        
     else:
         clear()
         print("Opção inválida, tente novamente.")

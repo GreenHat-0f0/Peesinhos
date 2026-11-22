@@ -3,19 +3,12 @@
 
 -showing list of options before input
 
--PICKLE AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARHJdklfbgjksefn
-
--save with pickle function
-
 -better organized gerando documento inputs
 
 -cant register already existing email
 
 -senha oculta
 
+-make docs layouts prettier
 
-PICKLE
-    -usuarios
-    -documentos de cada usuarios
-salvar option 
-apagar save option with "are you suuure???"
+-apagar save option with "are you suuure???"
