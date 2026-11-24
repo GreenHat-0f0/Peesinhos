@@ -3,6 +3,8 @@
 import pickle
 import math
 import os
+import getpass
+
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -39,41 +41,42 @@ class Modelo:
         self.layout = layout
         
     def __repr__(self):
-        return self.cod, self.layout
+        doc_exemplo = Documento("Exemplo", "Título", "Texto", "Assinatura", None)
+        return f"Modelo: {self.cod}\n{self.layout(doc_exemplo)}"
 modelos = []
 
 def layout1(documento):
     return (f"""   
-     {documento.nome}
+    Nome: {documento.nome}
     +--------------------+
-    |{documento.titulo}{" "*(20 - len(documento.titulo))}|
+    | {documento.titulo}{" "*(19 - len(documento.titulo))}|
     |                    |
-    |{documento.texto}{" "*(20 - len(documento.texto))}|
-    |                    |
-    |                    |
+    | {documento.texto}{" "*(19 - len(documento.texto))}|
     |                    |
     |                    |
     |                    |
     |                    |
-    |{documento.assinatura}{" "*(20 - len(documento.assinatura))}|
+    |                    |
+    |                    |
+    | {documento.assinatura}{" "*(19 - len(documento.assinatura))}|
     +--------------------+
                       """)
 modelos.append(Modelo(1, layout1))
 
 def layout2(documento):
     return (f"""   
-     {documento.nome}
+    Nome: {documento.nome}
     +--------------------+
-    |{" "*(20 - len(documento.titulo))}{documento.titulo}|
+    |{" "*(19 - len(documento.titulo))}{documento.titulo} |
     |                    |
-    |{documento.texto}{" "*(20 - len(documento.texto))}|
-    |                    |
-    |                    |
+    |{" "*(19 - len(documento.texto))}{documento.texto} |
     |                    |
     |                    |
     |                    |
     |                    |
-    |{" "*(20 - len(documento.assinatura))}{documento.assinatura}|
+    |                    |
+    |                    |
+    |{" "*(19 - len(documento.assinatura))}{documento.assinatura} |
     +--------------------+
                       """)
 modelos.append(Modelo(2, layout2))
@@ -84,7 +87,7 @@ def layout3(documento):
     +--------------------+
     |{" "* math.floor((20 - len(documento.titulo))/2)}{documento.titulo}{" "* math.ceil((20 - len(documento.titulo))/2)}|
     |                    |
-    |{documento.texto}{" "*(20 - len(documento.texto))}|
+    |{" "* math.floor((20 - len(documento.texto))/2)}{documento.texto}{" "* math.ceil((20 - len(documento.texto))/2)}|
     |                    |
     |                    |
     |                    |
@@ -100,14 +103,20 @@ modelos.append(Modelo(3, layout3))
 curr_user = None
 
 def cadastro():
-    novo_email = input("Email: ")
-    novo_senha = input("Senha: ")
+    while True:
+        novo_email = input("Email: ")
+        if any(usuario.email == novo_email for usuario in usuarios):
+            print("Email já cadastrado, utilize outro.")
+        else:
+            break
+    
+    novo_senha = getpass.getpass("Senha: ")
     usuarios.append(Usuario(novo_email, novo_senha))
 
 def login():
     global curr_user
     sup_email = input("Email: ")
-    sup_senha = input("Senha: ")
+    sup_senha = getpass.getpass("Senha: ")
     
     for usuario in usuarios:
         if sup_email == usuario.email and sup_senha == usuario.senha:
@@ -115,10 +124,19 @@ def login():
             return True
     
 def criar_doc():
-    nome = input("Nome do documento: " )
+    while True:
+        nome = input("Nome do documento: ")
+        if any(documento.nome == nome for documento in curr_user.documentos):
+            print("Nome já existente, escolha outro.")
+        else:
+            break
+            
     titulo = input("Titulo: ")
     texto = input("Texto: ")
     assinatura = input("Assinatura: ")
+    for modelo in modelos:
+        print(modelo.__repr__())
+        print()
     modelor = int(input("Modelo(cod): "))
     for modelo in modelos:
         if modelor == modelo.cod:
